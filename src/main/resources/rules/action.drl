@@ -1,0 +1,36 @@
+package com.kxr.PointDomain
+import com.kxr.bean.ActionRule
+import com.kxr.service.PushService
+
+function boolean pushMessage(String content){
+    return PushService.pushMessage(content);
+}
+
+//规则1: 最近打开预警通时间超过30次，并且距离上次开通会员 天数已经超过10天，则推送
+rule actionRule1
+    salience 100
+    lock-on-active false
+    when
+        $p : ActionRule(recentBrowseCount>30,(recentOpenMemberDayCount>10 || recentOpenMemberDayCount != -1))
+    then
+        $p.setPushContent("用户:"+$p.getUserName()+"\n最近7天打开APP次数为："+$p.getRecentBrowseCount()+"\n距离上次开通会员天数:"+$p.getRecentOpenMemberDayCount()
+            + "\n 推送内容：可以触发 会员价格优惠推送");
+        pushMessage($p.getPushContent());
+end
+
+// 规则2：规定时间内，登录过的用户，都可以代金券金额都可以 不同程度增加
+rule actionRule2
+    salience 99
+    lock-on-active true
+    date-effective "2023-03-26 23:59:59"
+    date-expires "2023-06-27 23:59:59"
+    when
+        $p : ActionRule(summerDiscount == false)
+    then
+        $p.setCashCouponAmount($p.getCashCouponAmount()+ 100);
+        update()
+        $p.setSummerDiscount(true);
+        $p.setPushContent("用户:"+$p.getUserName()+ "可以参与优惠活动啦"
+                                      + "\n 短信推送内容：XXXXXXX");
+        pushMessage($p.getPushContent());
+end
