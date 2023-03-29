@@ -8,7 +8,7 @@ package com.kxr.service;
 public class PushService {
 
     public static boolean pushMessage(String content) {
-        System.out.println("触发 PushService，进行实际推送， 推送内容:" + content);
+        System.out.println("PushService，进行实际推送， 推送内容:\n" + content);
         return true;
     }
 }

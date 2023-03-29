@@ -1,4 +1,6 @@
-package com.kxr.PointDomain
+package com.kxr.actionRule
+
+
 import com.kxr.bean.ActionRule
 import com.kxr.service.PushService
 
@@ -8,13 +10,14 @@ function boolean pushMessage(String content){
 
 //规则1: 最近打开预警通时间超过30次，并且距离上次开通会员 天数已经超过10天，则推送
 rule actionRule1
-    salience 100
+    salience 98
     lock-on-active false
     when
         $p : ActionRule(recentBrowseCount>30,(recentOpenMemberDayCount>10 || recentOpenMemberDayCount != -1))
     then
+        System.out.println("规则1被触发：");
         $p.setPushContent("用户:"+$p.getUserName()+"\n最近7天打开APP次数为："+$p.getRecentBrowseCount()+"\n距离上次开通会员天数:"+$p.getRecentOpenMemberDayCount()
-            + "\n 推送内容：可以触发 会员价格优惠推送");
+            + "\n 推送内容：可以触发 会员价格优惠推送\n");
         pushMessage($p.getPushContent());
 end
 
@@ -27,10 +30,10 @@ rule actionRule2
     when
         $p : ActionRule(summerDiscount == false)
     then
+        System.out.println("规则2被触发：");
         $p.setCashCouponAmount($p.getCashCouponAmount()+ 100);
-        update()
         $p.setSummerDiscount(true);
         $p.setPushContent("用户:"+$p.getUserName()+ "可以参与优惠活动啦"
-                                      + "\n 短信推送内容：XXXXXXX");
+                                      + "\n 短信推送内容：XXXXXXX\n");
         pushMessage($p.getPushContent());
 end

@@ -28,7 +28,22 @@ public class ActionRule {
     // 是否已经使用了暑期优惠
     private boolean summerDiscount = false;
 
+    // 可以使用的代金券总额
     private int cashCouponAmount;
+
+    public ActionRule() {
+    }
+
+    public ActionRule(String userName, int recentBrowseCount, int browseMemberViewCount, int useOptionalMonitoringCount, String pushContent, int recentOpenMemberDayCount, boolean summerDiscount, int cashCouponAmount) {
+        this.userName = userName;
+        this.recentBrowseCount = recentBrowseCount;
+        this.browseMemberViewCount = browseMemberViewCount;
+        this.useOptionalMonitoringCount = useOptionalMonitoringCount;
+        this.pushContent = pushContent;
+        this.recentOpenMemberDayCount = recentOpenMemberDayCount;
+        this.summerDiscount = summerDiscount;
+        this.cashCouponAmount = cashCouponAmount;
+    }
 
     public int getCashCouponAmount() {
         return cashCouponAmount;

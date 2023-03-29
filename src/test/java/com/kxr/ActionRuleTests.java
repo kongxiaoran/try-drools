@@ -1,6 +1,9 @@
 package com.kxr;
 
+import com.alibaba.fastjson.JSON;
 import com.kxr.bean.*;
+import com.kxr.service.BehaviorAnalysisService;
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -17,6 +21,9 @@ class ActionRuleTests {
 
     @Autowired
     private KieSession session;
+
+    @Autowired
+    BehaviorAnalysisService behaviorAnalysisService;
 
     @Test
     public void actionRule1Test(){
@@ -26,6 +33,11 @@ class ActionRuleTests {
         action.setRecentOpenMemberDayCount(12);
         session.insert(action);
         session.fireAllRules();
+    }
+
+    @Test
+    public void testService(){
+        behaviorAnalysisService.startAnalysis();
     }
 
     @AfterEach
